@@ -1,65 +1,73 @@
+import React, { useState } from 'react'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import validateColor from 'validate-color'
+import styled from 'styled-components'
+import AddForm from '../components/AddForm'
+import Grid from '../components/Grid'
+import Color from '../components/Color'
+import Button from '../components/Button'
+
+const ActionWrap = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 20px;
+`
 
 export default function Home() {
+  const [colors, setColors] = useState([])
+  const [newColor, setNewColor] = useState('')
+  const [hasError, setHasError] = useState(false)
+  const [showAdd, setShowAdd] = useState(true)
+
+  const handleChange = e => {
+    const { value } = e.target
+    setNewColor(value)
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    if (!validateColor(newColor)) {
+      setHasError(true)
+    } else {
+      setHasError(false)
+      setColors([...colors, newColor])
+      setShowAdd(false)
+      document.getElementById("new-color").value = ''
+    }
+  }
+
+  const handleAdd = () => {
+    setShowAdd(true)
+  }
+
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Color Compare</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      {colors.length < 2 || showAdd ? (
+        <AddForm
+          handleChange={handleChange}z
+          handleSubmit={handleSubmit}
+          hasError={hasError}
+          value={newColor}
+        />
+      ) : null}
+      {colors.length ? (
+        <Grid>
+          {colors.map((color, index) =>
+            <Color color={color} key={index} />
+          )}
+        </Grid>
+      ) : null}
+      {colors.length >= 2 ? (
+        <ActionWrap>
+          <Button handleClick={() => setShowAdd(true)}>Add</Button>
+          <Button handleClick={() => setColors([])}>Reset</Button>
+        </ActionWrap>
+      ) : null}
     </div>
   )
 }
