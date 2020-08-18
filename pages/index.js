@@ -68,13 +68,15 @@ export default function Home() {
         <ActionWrap>
           <Button
             handleClick={() => setShowAdd(true)}
-            icon={<Plus size={16} />}
+            icon={<Plus size={24} />}
             label="Add"
+            variant="icon"
           />
           <Button
             handleClick={() => setColors([])}
-            icon={<RefreshCw size={16} />}
+            icon={<RefreshCw size={24} />}
             label="Reset"
+            variant="icon"
           />
         </ActionWrap>
       ) : null}
