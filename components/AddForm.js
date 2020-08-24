@@ -24,6 +24,7 @@ const AddForm = ({
             icon={<Plus />}
             label="Add"
             textColor="#ffffff"
+            variant="text"
           />
         </InputWrap>
         {hasError && 'Invalid format'}

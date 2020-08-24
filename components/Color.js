@@ -24,27 +24,28 @@ const ColorActions = styled.div`
 
 const ColorLabel = styled.div`
   position: absolute;
-  bottom: 0px;
-  left: 0px;
+  width: 400px;
+  bottom: 10px;
+  left: -390px;
   transform: rotate(90deg);
-  transform-origin: 100% 0;
-  font-size: 40px;
+  transform-origin: right bottom;
+  font-size: 32px;
   text-align: right;
 `
 
-const Color = ({ color }) => {
+const Color = ({ color, handleEdit, handleRemove }) => {
   return (
     <ColorWrap color={color}>
       <ColorLabel>{color}</ColorLabel>
       <ColorActions>
         <Button
-          handleClick={() => console.log('edit')}
+          handleClick={handleEdit}
           icon={<Edit2 size={24} />}
           label="Edit"
           variant="icon"
         />
         <Button
-          handleClick={() => console.log('delete')}
+          handleClick={handleRemove}
           icon={<Trash2 size={24} />}
           label="Delete"
           variant="icon"

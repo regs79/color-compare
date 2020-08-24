@@ -21,14 +21,29 @@ const ActionWrap = styled.div`
 `
 
 export default function Home() {
-  const [colors, setColors] = useState([])
+  const [colors, setColors] = useState(['green','yellow','yellowgreen'])
   const [newColor, setNewColor] = useState(null)
   const [hasError, setHasError] = useState(false)
-  const [showAdd, setShowAdd] = useState(true)
+  const [showAdd, setShowAdd] = useState(false)
 
   const handleChange = e => {
     const { value } = e.target
     setNewColor(value)
+  }
+
+  const handleEdit = index => {
+    setNewColor(colors[index])
+    setShowAdd(true)
+    console.log(newColor)
+
+  }
+
+  const handleRemove = index => {
+    var array = [...colors]
+    if (index !== -1) {
+      array.splice(index, 1)
+      setColors(array)
+    }
   }
 
   const handleSubmit = e => {
@@ -60,7 +75,12 @@ export default function Home() {
       {colors.length ? (
         <Grid>
           {colors.map((color, index) =>
-            <Color color={color} key={index} />
+            <Color
+              color={color}
+              handleEdit={() => handleEdit(index)}
+              handleRemove={() => handleRemove(index)}
+              key={index}  
+            />
           )}
         </Grid>
       ) : null}

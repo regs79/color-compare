@@ -51,14 +51,10 @@ const Button = ({
 Button.propTypes = {
   color: PropTypes.string,
   handleClick: PropTypes.func,
-  icon: PropTypes.bool,
+  icon: PropTypes.object,
   label: PropTypes.string.isRequired,
   textColor: PropTypes.string,
-  variant: PropTypes.oneOf(['icon', 'text']),
-}
-
-Button.propTypes = {
-  variant: 'text',
+  variant: PropTypes.oneOf(['icon', 'text']).isRequired,
 }
 
 export default Button
