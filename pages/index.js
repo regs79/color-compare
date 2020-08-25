@@ -87,6 +87,7 @@ export default function Home() {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           hasError={hasError}
+          isVisible={setShowAdd}
           value={newColor}
         />
       ) : null}
@@ -95,9 +96,10 @@ export default function Home() {
           {colors.map((color, index) =>
             <Color
               color={color}
+              formOpen={showAdd}
               handleEdit={() => handleEdit(index)}
               handleRemove={() => handleRemove(index)}
-              key={index}  
+              key={index}
             />
           )}
         </Grid>

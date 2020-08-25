@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Plus } from 'react-feather'
 import Button from './Button'
@@ -6,8 +7,17 @@ const AddForm = ({
   handleChange,
   handleSubmit,
   hasError,
+  isVisible,
   value,
 }) => {
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (isVisible) {
+      inputRef.current.focus()
+    }
+  }, [isVisible])
+
   return(
     <Wrapper>
       <Form>
@@ -16,6 +26,7 @@ const AddForm = ({
             id="new-color"
             onChange={handleChange}
             placeholder="Enter a color"
+            ref={inputRef}
             value={value}
           />
           <Button
