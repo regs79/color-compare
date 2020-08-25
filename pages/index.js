@@ -21,25 +21,58 @@ const ActionWrap = styled.div`
 `
 
 export default function Home() {
-  const [colors, setColors] = useState([])
+  const [colors, setColors] = useState(['green','yellow','yellowgreen'])
   const [newColor, setNewColor] = useState(null)
+  const [editColor, setEditColor] = useState(null)
   const [hasError, setHasError] = useState(false)
-  const [showAdd, setShowAdd] = useState(true)
+  const [showAdd, setShowAdd] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
 
   const handleChange = e => {
     const { value } = e.target
     setNewColor(value)
   }
 
+  const handleEdit = index => {
+    setIsEditing(true)
+    setNewColor(colors[index])
+    setEditColor(index)
+    setShowAdd(true)
+  }
+
+  const handleRemove = index => {
+    var array = [...colors]
+    if (index !== -1) {
+      array.splice(index, 1)
+      setColors(array)
+    }
+  }
+
+  const handleReset = () => {
+    setColors([])
+    setNewColor(null)
+  }
+
   const handleSubmit = e => {
     e.preventDefault()
     if (!validateColor(newColor)) {
       setHasError(true)
+    } else if (isEditing) {
+      setHasError(false)
+      let array = [...colors]
+      array[editColor] = newColor
+      setColors(array)
+      setEditColor(null)
+      setIsEditing(false)
+      document.getElementById("new-color").value = ''
+      setNewColor('')
+      setShowAdd(false)
     } else {
       setHasError(false)
       setColors([...colors, newColor])
-      setShowAdd(false)
       document.getElementById("new-color").value = ''
+      setNewColor('')
+      setShowAdd(false)
     }
   }
 
@@ -60,7 +93,12 @@ export default function Home() {
       {colors.length ? (
         <Grid>
           {colors.map((color, index) =>
-            <Color color={color} key={index} />
+            <Color
+              color={color}
+              handleEdit={() => handleEdit(index)}
+              handleRemove={() => handleRemove(index)}
+              key={index}  
+            />
           )}
         </Grid>
       ) : null}
@@ -68,13 +106,15 @@ export default function Home() {
         <ActionWrap>
           <Button
             handleClick={() => setShowAdd(true)}
-            icon={<Plus size={16} />}
+            icon={<Plus size={24} />}
             label="Add"
+            variant="icon"
           />
           <Button
-            handleClick={() => setColors([])}
-            icon={<RefreshCw size={16} />}
+            handleClick={handleReset}
+            icon={<RefreshCw size={24} />}
             label="Reset"
+            variant="icon"
           />
         </ActionWrap>
       ) : null}
