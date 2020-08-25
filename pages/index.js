@@ -23,8 +23,10 @@ const ActionWrap = styled.div`
 export default function Home() {
   const [colors, setColors] = useState(['green','yellow','yellowgreen'])
   const [newColor, setNewColor] = useState(null)
+  const [editColor, setEditColor] = useState(null)
   const [hasError, setHasError] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
 
   const handleChange = e => {
     const { value } = e.target
@@ -32,10 +34,10 @@ export default function Home() {
   }
 
   const handleEdit = index => {
+    setIsEditing(true)
     setNewColor(colors[index])
+    setEditColor(index)
     setShowAdd(true)
-    console.log(newColor)
-
   }
 
   const handleRemove = index => {
@@ -46,15 +48,31 @@ export default function Home() {
     }
   }
 
+  const handleReset = () => {
+    setColors([])
+    setNewColor(null)
+  }
+
   const handleSubmit = e => {
     e.preventDefault()
     if (!validateColor(newColor)) {
       setHasError(true)
+    } else if (isEditing) {
+      setHasError(false)
+      let array = [...colors]
+      array[editColor] = newColor
+      setColors(array)
+      setEditColor(null)
+      setIsEditing(false)
+      document.getElementById("new-color").value = ''
+      setNewColor('')
+      setShowAdd(false)
     } else {
       setHasError(false)
       setColors([...colors, newColor])
-      setShowAdd(false)
       document.getElementById("new-color").value = ''
+      setNewColor('')
+      setShowAdd(false)
     }
   }
 
@@ -93,7 +111,7 @@ export default function Home() {
             variant="icon"
           />
           <Button
-            handleClick={() => setColors([])}
+            handleClick={handleReset}
             icon={<RefreshCw size={24} />}
             label="Reset"
             variant="icon"

@@ -6,7 +6,7 @@ const AddForm = ({
   handleChange,
   handleSubmit,
   hasError,
-  newColor,
+  value,
 }) => {
   return(
     <Wrapper>
@@ -16,7 +16,7 @@ const AddForm = ({
             id="new-color"
             onChange={handleChange}
             placeholder="Enter a color"
-            value={newColor}
+            value={value}
           />
           <Button
             handleClick={handleSubmit}
@@ -52,9 +52,11 @@ const Form = styled.form`
   transform: translate(-50%, -50%);
   z-index: 1;
   padding: 60px 40px;
-  border-radius: 4px;
+  border-radius: 20px;
   background: #ffffff;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px,
+              rgba(0, 0, 0, 0.14) 0px 1px 1px 0px,
+              rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
 `
 
 const InputWrap = styled.div`
@@ -75,34 +77,5 @@ const Input = styled.input`
     outline: 2px solid #42a5f5;
   }
 `
-
-// const ButtonWrap = styled.div`
-//   padding: 8px;
-//   border-radius: 50px;
-//   background: linear-gradient(145deg, #e6e6e6, #ffffff);
-//   box-shadow:  20px 20px 60px #d9d9d9, 
-//              -20px -20px 60px #ffffff;
-// `
-
-// const Button = styled.button`
-//   width: 50px;
-//   height: 50px;
-//   color: #fff;
-//   font-size: 16px;
-//   text-shadow: 2px 2px rgba(0,0,0,0.1);
-//   border: none;
-//   border-radius: 37px;
-//   background: linear-gradient(145deg, #2af459, #23cd4b);
-//   box-shadow:  1px 1px 2px #1dab3e, 
-//               -1px -1px 2px #31ff68;
-//   &:hover {
-//     background: linear-gradient(145deg, #23cd4b, #2af459);
-//   }
-//   &:active {
-//     background: #27e453;
-//     box-shadow: inset 2px 2px 4px #1dab3e, 
-//             inset -2px -2px 4px #31ff68;
-//   }
-// `
 
 export default AddForm
