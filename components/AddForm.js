@@ -1,3 +1,5 @@
+import { useRef, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Plus } from 'react-feather'
 import Button from './Button'
@@ -6,58 +8,56 @@ const AddForm = ({
   handleChange,
   handleSubmit,
   hasError,
+  isVisible,
   value,
 }) => {
-  return(
-    <Wrapper>
-      <Form>
-        <InputWrap>
-          <Input
-            id="new-color"
-            onChange={handleChange}
-            placeholder="Enter a color"
-            value={value}
-          />
-          <Button
-            handleClick={handleSubmit}
-            color="#1dab3e"
-            icon={<Plus />}
-            label="Add"
-            textColor="#ffffff"
-            variant="text"
-          />
-        </InputWrap>
-        {hasError && 'Invalid format'}
-      </Form>
-    </Wrapper>
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (isVisible) {
+      inputRef.current.focus()
+    }
+  }, [isVisible])
+
+  return (
+    <form>
+      <InputWrap>
+        <Input
+          id="new-color"
+          onChange={handleChange}
+          placeholder="Enter a color"
+          ref={inputRef}
+          value={value}
+        />
+        <Button
+          handleClick={handleSubmit}
+          color="#1dab3e"
+          icon={<Plus />}
+          label="Add"
+          textColor="#ffffff"
+          variant="text"
+        />
+      </InputWrap>
+      {hasError && 'Invalid format'}
+    </form>
   )
 }
 
-const Wrapper = styled.div`
-  /* position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center; */
-  /* background-color: rgba(255,255,255,0.9); */
-`
+AddForm.propTypes = {
+  handleChange: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  hasError: PropTypes.bool,
+  isVisible: PropTypes.bool,
+  value: PropTypes.string,
+}
 
-const Form = styled.form`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  padding: 60px 40px;
-  border-radius: 20px;
-  background: #ffffff;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px,
-              rgba(0, 0, 0, 0.14) 0px 1px 1px 0px,
-              rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
-`
+AddForm.defaultProps = {
+  handleChange: () => {},
+  handleSubmit: () => {},
+  hasError: false,
+  isVisible: false,
+  value: '',
+}
 
 const InputWrap = styled.div`
   width: 100%;

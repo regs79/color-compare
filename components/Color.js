@@ -13,12 +13,15 @@ const ColorWrap = styled.div`
 `
 
 const ColorActions = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 40px;
   button + button {
     margin-left: 20px;
+  }
+  ${ColorWrap}:hover & {
+    display: ${props => !props.formOpen ? 'flex' : 'none'};
   }
 `
 
@@ -33,11 +36,11 @@ const ColorLabel = styled.div`
   text-align: right;
 `
 
-const Color = ({ color, handleEdit, handleRemove }) => {
+const Color = ({ color, formOpen, handleEdit, handleRemove }) => {
   return (
     <ColorWrap color={color}>
       <ColorLabel>{color}</ColorLabel>
-      <ColorActions>
+      <ColorActions formOpen={formOpen}>
         <Button
           handleClick={handleEdit}
           icon={<Edit2 size={24} />}
