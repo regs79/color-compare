@@ -1,13 +1,13 @@
 import { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Plus } from 'react-feather'
 import Button from './Button'
 
-const AddForm = ({
+const Form = ({
   handleChange,
   handleSubmit,
   hasError,
+  label,
   isVisible,
   value,
 }) => {
@@ -23,7 +23,7 @@ const AddForm = ({
     <form>
       <InputWrap>
         <Input
-          id="new-color"
+          id="color"
           onChange={handleChange}
           placeholder="Enter a color"
           ref={inputRef}
@@ -32,8 +32,8 @@ const AddForm = ({
         <Button
           handleClick={handleSubmit}
           color="#1dab3e"
-          icon={<Plus />}
-          label="Add"
+          // icon={<Plus />}
+          label={label}
           textColor="#ffffff"
           variant="text"
         />
@@ -43,15 +43,16 @@ const AddForm = ({
   )
 }
 
-AddForm.propTypes = {
+Form.propTypes = {
   handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,
   hasError: PropTypes.bool,
-  isVisible: PropTypes.bool,
+  label: PropTypes.string.isRequired,
+  isVisible: PropTypes.func,
   value: PropTypes.string,
 }
 
-AddForm.defaultProps = {
+Form.defaultProps = {
   handleChange: () => {},
   handleSubmit: () => {},
   hasError: false,
@@ -78,4 +79,4 @@ const Input = styled.input`
   }
 `
 
-export default AddForm
+export default Form

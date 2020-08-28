@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
 import validateColor from 'validate-color'
 import styled from 'styled-components'
 import { Plus, RefreshCw } from 'react-feather'
-import AddForm from '../components/AddForm'
+import Form from '../components/Form'
 import Grid from '../components/Grid'
 import Color from '../components/Color'
 import Button from '../components/Button'
@@ -22,12 +22,31 @@ const ActionWrap = styled.div`
 `
 
 export default function Home() {
-  const [colors, setColors] = useState(['green', 'yellow', 'yellowgreen'])
-  const [newColor, setNewColor] = useState(null)
+  const [colors, setColors] = useState([])
+  const [newColor, setNewColor] = useState('')
   const [editColor, setEditColor] = useState(null)
   const [hasError, setHasError] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [contentType, setContentType] = useState(null)
+
+  const modalRef = useRef()
+
+  const openModal = () => {
+    modalRef.current.openModal()
+  }
+
+  const closeModal = () => {
+    document.getElementById('color').value = ''
+    setNewColor('')
+    modalRef.current.closeModal()
+  }
+
+  const handleAdd = () => {
+    setContentType('add')
+    openModal()
+    setNewColor('')
+  }
 
   const handleChange = (e) => {
     const { value } = e.target
@@ -35,10 +54,11 @@ export default function Home() {
   }
 
   const handleEdit = (index) => {
+    setContentType('edit')
     setIsEditing(true)
     setNewColor(colors[index])
     setEditColor(index)
-    setShowAdd(true)
+    openModal()
   }
 
   const handleRemove = (index) => {
@@ -65,17 +85,52 @@ export default function Home() {
       setColors(array)
       setEditColor(null)
       setIsEditing(false)
-      document.getElementById('new-color').value = ''
+      document.getElementById('color').value = ''
       setNewColor('')
-      setShowAdd(false)
+      closeModal()
     } else {
       setHasError(false)
       setColors([...colors, newColor])
-      document.getElementById('new-color').value = ''
+      document.getElementById('color').value = ''
       setNewColor('')
-      setShowAdd(false)
+      closeModal()
     }
   }
+
+  function ModalContent(type) {
+    switch (type) {
+      case 'add':
+        return (
+          <Form
+            label="Add"
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            hasError={hasError}
+            isVisible={setShowAdd}
+            value={newColor}
+          />
+        )
+      case 'edit':
+        return (
+          <Form
+            label="Change"
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            hasError={hasError}
+            isVisible={setShowAdd}
+            value={newColor}
+          />
+        )
+      default:
+        return <div>You know...the usual</div>
+    }
+  }
+
+  useEffect(() => {
+    if (colors.length <= 0) {
+      handleAdd()
+    }
+  }, [colors])
 
   return (
     <div>
@@ -96,33 +151,21 @@ export default function Home() {
           ))}
         </Grid>
       ) : null}
-      {colors.length >= 2 ? (
-        <ActionWrap>
-          <Button
-            handleClick={() => setShowAdd(!showAdd)}
-            icon={<Plus size={24} />}
-            label="Add"
-            variant="icon"
-          />
-          <Button
-            handleClick={handleReset}
-            icon={<RefreshCw size={24} />}
-            label="Reset"
-            variant="icon"
-          />
-        </ActionWrap>
-      ) : null}
-      {colors.length < 2 || showAdd ? (
-        <Modal>
-          <AddForm
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            hasError={hasError}
-            isVisible={setShowAdd}
-            value={newColor}
-          />
-        </Modal>
-      ) : null}
+      <ActionWrap>
+        <Button
+          handleClick={handleAdd}
+          icon={<Plus size={24} />}
+          label="Add"
+          variant="icon"
+        />
+        <Button
+          handleClick={handleReset}
+          icon={<RefreshCw size={24} />}
+          label="Reset"
+          variant="icon"
+        />
+      </ActionWrap>
+      <Modal ref={modalRef}>{ModalContent(contentType)}</Modal>
     </div>
   )
 }
