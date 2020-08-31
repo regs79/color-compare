@@ -10,6 +10,7 @@
     "lint-fix": "eslint ./components/** ./pages/** -c .eslintrc.json --fix --ext js,jsx"
   },
   "dependencies": {
+    "framer-motion": "^2.6.5",
     "next": "9.5.1",
     "prop-types": "^15.7.2",
     "react": "16.13.1",

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Edit2, Trash2 } from 'react-feather'
-import Button from '../components/Button'
+import Button from './Button'
 
 const ColorWrap = styled.div`
   position: relative;
@@ -9,7 +9,7 @@ const ColorWrap = styled.div`
   justify-content: flex-end;
   width: auto;
   height: 100%;
-  background-color: ${props => props.color ? props.color : '#cccccc'};
+  background-color: ${(props) => (props.color ? props.color : '#cccccc')};
 `
 
 const ColorActions = styled.div`
@@ -21,7 +21,7 @@ const ColorActions = styled.div`
     margin-left: 20px;
   }
   ${ColorWrap}:hover & {
-    display: ${props => !props.formOpen ? 'flex' : 'none'};
+    display: ${(props) => (!props.formOpen ? 'flex' : 'none')};
   }
 `
 
@@ -40,20 +40,22 @@ const Color = ({ color, formOpen, handleEdit, handleRemove }) => {
   return (
     <ColorWrap color={color}>
       <ColorLabel>{color}</ColorLabel>
-      <ColorActions formOpen={formOpen}>
-        <Button
-          handleClick={handleEdit}
-          icon={<Edit2 size={24} />}
-          label="Edit"
-          variant="icon"
-        />
-        <Button
-          handleClick={handleRemove}
-          icon={<Trash2 size={24} />}
-          label="Delete"
-          variant="icon"
-        />
-      </ColorActions>
+      {!formOpen ? (
+        <ColorActions formOpen={formOpen}>
+          <Button
+            handleClick={handleEdit}
+            icon={<Edit2 size={24} />}
+            label="Edit"
+            variant="icon"
+          />
+          <Button
+            handleClick={handleRemove}
+            icon={<Trash2 size={24} />}
+            label="Delete"
+            variant="icon"
+          />
+        </ColorActions>
+      ) : null}
     </ColorWrap>
   )
 }

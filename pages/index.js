@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
 import validateColor from 'validate-color'
 import styled from 'styled-components'
+import { AnimatePresence } from 'framer-motion'
 import { Plus, RefreshCw } from 'react-feather'
 import Form from '../components/Form'
 import Grid from '../components/Grid'
@@ -22,11 +23,11 @@ const ActionWrap = styled.div`
 `
 
 export default function Home() {
-  const [colors, setColors] = useState([])
+  const [colors, setColors] = useState(['yellow', 'yellowgreen', 'green'])
   const [newColor, setNewColor] = useState('')
   const [editColor, setEditColor] = useState(null)
   const [hasError, setHasError] = useState(false)
-  const [showAdd, setShowAdd] = useState(false)
+  const [showModal, setShowModal] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [contentType, setContentType] = useState(null)
 
@@ -42,11 +43,11 @@ export default function Home() {
     modalRef.current.closeModal()
   }
 
-  const handleAdd = () => {
+  const handleAdd = useCallback(() => {
     setContentType('add')
     openModal()
     setNewColor('')
-  }
+  }, [])
 
   const handleChange = (e) => {
     const { value } = e.target
@@ -106,8 +107,9 @@ export default function Home() {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             hasError={hasError}
-            isVisible={setShowAdd}
+            isVisible={setShowModal}
             value={newColor}
+            key="form"
           />
         )
       case 'edit':
@@ -117,8 +119,9 @@ export default function Home() {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             hasError={hasError}
-            isVisible={setShowAdd}
+            isVisible={setShowModal}
             value={newColor}
+            key="form"
           />
         )
       default:
@@ -130,7 +133,7 @@ export default function Home() {
     if (colors.length <= 0) {
       handleAdd()
     }
-  }, [colors])
+  }, [colors, handleAdd])
 
   return (
     <div>
@@ -143,7 +146,7 @@ export default function Home() {
           {colors.map((color, index) => (
             <Color
               color={color}
-              formOpen={showAdd}
+              formOpen={showModal}
               handleEdit={() => handleEdit(index)}
               handleRemove={() => handleRemove(index)}
               key={index}
@@ -165,7 +168,9 @@ export default function Home() {
           variant="icon"
         />
       </ActionWrap>
-      <Modal ref={modalRef}>{ModalContent(contentType)}</Modal>
+      <AnimatePresence>
+        <Modal ref={modalRef}>{ModalContent(contentType)}</Modal>
+      </AnimatePresence>
     </div>
   )
 }
